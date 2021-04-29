@@ -1,0 +1,51 @@
+name: Push File
+
+on: push
+
+jobs:
+  copy-file:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Pushes Pre-Complied files
+      uses: dmnemec/copy_file_to_another_repo_action@main
+      env:
+        API_TOKEN_GITHUB: ${{ secrets.GH_TOKEN }}
+      with:
+        source_file: './'
+        destination_repo: 'adam-at-brown/ws-static-base'
+        destination_folder: 'src/gatsby-1'
+        destination_branch: main
+        user_email: 'adam_holtzman@brown.edu'
+        user_name: 'adam-at-brown'
+        commit_message: 'Add to repo'
+
+    - name: Navigate to repo
+      run: cd $GITHUB_WORKSPACE
+    - uses: actions/setup-node@v1
+      with:
+        node-version: "12.x"
+    - name: Install deps
+      run: yarn
+    - name: Clean for Build
+      run: yarn clean
+    - name: Build docs
+      run: yarn build
+
+    - name: Pushes to another repository
+      id: push_directory
+      uses: dmnemec/copy_file_to_another_repo_action@main
+      env:
+        API_TOKEN_GITHUB: ${{ secrets.GH_TOKEN }}
+      with:
+        source_file: 'public'
+        destination_folder: src
+        destination_repo: 'adam-at-brown/ws-static-base'
+        user_name: adam-at-brown
+        user_email: adam_holtzman@brown.edu
+        commit_message: See ORIGIN_COMMIT from $GITHUB_REF
+
+    - name: Test get variable exported by push-to-another-repository
+      run: echo $DESTINATION_CLONED_DIRECTORY
