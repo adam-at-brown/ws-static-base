@@ -17,10 +17,10 @@ jobs:
         source_file: './'
         destination_repo: 'adam-at-brown/ws-static-base'
         destination_folder: 'src/gatsby-1'
-        destination_branch: main
+        destination_branch: test-branch-name
         user_email: 'adam_holtzman@brown.edu'
         user_name: 'adam-at-brown'
-        commit_message: 'Add to repo'
+        commit_message: 'new version for deployment from env.GITHUB_REPOSITORY $env.GITHUB_JOB'
 
     - name: Navigate to repo
       run: cd $GITHUB_WORKSPACE
@@ -41,11 +41,12 @@ jobs:
         API_TOKEN_GITHUB: ${{ secrets.GH_TOKEN }}
       with:
         source_file: 'public'
-        destination_folder: src
+        destination_folder: src/site_name
         destination_repo: 'adam-at-brown/ws-static-base'
+        destination_branch: test-branch-name
         user_name: adam-at-brown
         user_email: adam_holtzman@brown.edu
-        commit_message: See ORIGIN_COMMIT from $GITHUB_REF
+        commit_message: 'new compiled version for deployment GITHUB_REPOSITORY GITHUB_JOB'
 
     - name: Test get variable exported by push-to-another-repository
-      run: echo $DESTINATION_CLONED_DIRECTORY
+      run: echo $env.DESTINATION_CLONED_DIRECTORY
