@@ -17,7 +17,6 @@ jobs:
         source_file: './'
         destination_repo: 'adam-at-brown/ws-static-base'
         destination_folder: 'src/plain_html'
-        # destination_branch: test-branch-name
         user_email: 'adam_holtzman@brown.edu'
         user_name: 'adam-at-brown'
 
